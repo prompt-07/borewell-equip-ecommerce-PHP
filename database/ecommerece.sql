@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.2
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 23, 2019 at 07:53 PM
--- Server version: 10.1.34-MariaDB
--- PHP Version: 7.2.7
+-- Generation Time: Sep 30, 2021 at 12:58 AM
+-- Server version: 10.4.21-MariaDB
+-- PHP Version: 8.0.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -21,14 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `ecommerece`
 --
-
-DELIMITER $$
---
--- Procedures
---
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getcat` (IN `cid` INT)  SELECT * FROM categories WHERE cat_id=cid$$
-
-DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -48,7 +39,7 @@ CREATE TABLE `admin_info` (
 --
 
 INSERT INTO `admin_info` (`admin_id`, `admin_name`, `admin_email`, `admin_password`) VALUES
-(1, 'admin', 'admin@gmail.com', '25f9e794323b453885f5181f1b624d0b');
+(1, 'admin', 'admin@gmail.com', '12345678');
 
 -- --------------------------------------------------------
 
@@ -66,12 +57,12 @@ CREATE TABLE `brands` (
 --
 
 INSERT INTO `brands` (`brand_id`, `brand_title`) VALUES
-(1, 'HP'),
-(2, 'Samsung'),
-(3, 'Apple'),
-(4, 'motorolla'),
-(5, 'LG'),
-(6, 'Cloth Brand');
+(1, 'Madhav Equipments'),
+(2, 'Rupa Electric'),
+(3, 'Crompton Argitech'),
+(4, 'Z+ Bore Soln'),
+(5, 'JJ Heavy'),
+(6, 'Jet Press');
 
 -- --------------------------------------------------------
 
@@ -97,18 +88,21 @@ INSERT INTO `cart` (`id`, `p_id`, `ip_add`, `user_id`, `qty`) VALUES
 (10, 11, '::1', 7, 1),
 (11, 45, '::1', 7, 1),
 (44, 5, '::1', 3, 0),
-(46, 2, '::1', 3, 0),
 (48, 72, '::1', 3, 0),
 (49, 60, '::1', 8, 1),
 (50, 61, '::1', 8, 1),
 (51, 1, '::1', 8, 1),
 (52, 5, '::1', 9, 1),
-(53, 2, '::1', 14, 1),
 (54, 3, '::1', 14, 1),
 (55, 5, '::1', 14, 1),
 (56, 1, '::1', 9, 1),
-(57, 2, '::1', 9, 1),
-(71, 61, '127.0.0.1', -1, 1);
+(71, 61, '127.0.0.1', -1, 1),
+(149, 1, '::1', 28, 1),
+(150, 1, '::1', 27, 1),
+(151, 1, '::1', -1, 1),
+(152, 13, '::1', -1, 1),
+(153, 23, '::1', -1, 1),
+(154, 25, '::1', -1, 1);
 
 -- --------------------------------------------------------
 
@@ -126,13 +120,10 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`cat_id`, `cat_title`) VALUES
-(1, 'Electronics'),
-(2, 'Ladies Wears'),
-(3, 'Mens Wear'),
-(4, 'Kids Wear'),
-(5, 'Furnitures'),
-(6, 'Home Appliances'),
-(7, 'Electronics Gadgets');
+(1, 'DC-Motor'),
+(2, 'Submersible Pumps'),
+(3, 'Control Panel'),
+(4, 'Other Accessories');
 
 -- --------------------------------------------------------
 
@@ -187,7 +178,6 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`order_id`, `user_id`, `product_id`, `qty`, `trx_id`, `p_status`) VALUES
-(1, 12, 7, 1, '07M47684BS5725041', 'Completed'),
 (2, 14, 2, 1, '07M47684BS5725041', 'Completed');
 
 -- --------------------------------------------------------
@@ -218,7 +208,8 @@ CREATE TABLE `orders_info` (
 --
 
 INSERT INTO `orders_info` (`order_id`, `user_id`, `f_name`, `email`, `address`, `city`, `state`, `zip`, `cardname`, `cardnumber`, `expdate`, `prod_count`, `total_amt`, `cvv`) VALUES
-(1, 12, 'Puneeth', 'puneethreddy951@gmail.com', 'Bangalore, Kumbalagodu, Karnataka', 'Bangalore', 'Karnataka', 560074, 'pokjhgfcxc', '4321 2345 6788 7654', '12/90', 3, 77000, 1234);
+(1, 12, 'Puneeth', 'puneethreddy951@gmail.com', 'Bangalore, Kumbalagodu, Karnataka', 'Bangalore', 'Karnataka', 560074, 'pokjhgfcxc', '4321 2345 6788 7654', '12/90', 3, 77000, 1234),
+(2, 26, 'Ajay', 'ajay@gmail.com', 'Kalyan', 'Thane', 'maha', 200012, 'Ajau', '1281831839139131', '10/24', 1, 5000, 555);
 
 -- --------------------------------------------------------
 
@@ -241,7 +232,8 @@ CREATE TABLE `order_products` (
 INSERT INTO `order_products` (`order_pro_id`, `order_id`, `product_id`, `qty`, `amt`) VALUES
 (73, 1, 1, 1, 5000),
 (74, 1, 4, 2, 64000),
-(75, 1, 8, 1, 40000);
+(75, 1, 8, 1, 40000),
+(91, 2, 1, 1, 5000);
 
 -- --------------------------------------------------------
 
@@ -265,77 +257,32 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`product_id`, `product_cat`, `product_brand`, `product_title`, `product_price`, `product_desc`, `product_image`, `product_keywords`) VALUES
-(1, 1, 2, 'Samsung galaxy s7 edge', 5000, 'Samsung galaxy s7 edge', 'product07.png', 'samsung mobile electronics'),
-(2, 1, 3, 'iPhone 5s', 25000, 'iphone 5s', 'http___pluspng.com_img-png_iphone-hd-png-iphone-apple-png-file-550.png', 'mobile iphone apple'),
-(3, 1, 3, 'iPad air 2', 30000, 'ipad apple brand', 'da4371ffa192a115f922b1c0dff88193.png', 'apple ipad tablet'),
-(4, 1, 3, 'iPhone 6s', 32000, 'Apple iPhone ', 'http___pluspng.com_img-png_iphone-6s-png-iphone-6s-gold-64gb-1000.png', 'iphone apple mobile'),
-(5, 1, 2, 'iPad 2', 10000, 'samsung ipad', 'iPad-air.png', 'ipad tablet samsung'),
-(6, 1, 1, 'samsung Laptop r series', 35000, 'samsung Black combination Laptop', 'laptop_PNG5939.png', 'samsung laptop '),
-(7, 1, 1, 'Laptop Pavillion', 50000, 'Laptop Hp Pavillion', 'laptop_PNG5930.png', 'Laptop Hp Pavillion'),
-(8, 1, 4, 'Sony', 40000, 'Sony Mobile', '530201353846AM_635_sony_xperia_z.png', 'sony mobile'),
-(9, 1, 3, 'iPhone New', 12000, 'iphone', 'iphone-hd-png-iphone-apple-png-file-550.png', 'iphone apple mobile'),
-(10, 2, 6, 'Red Ladies dress', 1000, 'red dress for girls', 'red dress.jpg', 'red dress '),
-(11, 2, 6, 'Blue Heave dress', 1200, 'Blue dress', 'images.jpg', 'blue dress cloths'),
-(12, 2, 6, 'Ladies Casual Cloths', 1500, 'ladies casual summer two colors pleted', '7475-ladies-casual-dresses-summer-two-colors-pleated.jpg', 'girl dress cloths casual'),
-(13, 2, 6, 'SpringAutumnDress', 1200, 'girls dress', 'Spring-Autumn-Winter-Young-Ladies-Casual-Wool-Dress-Women-s-One-Piece-Dresse-Dating-Clothes-Medium.jpg_640x640.jpg', 'girl dress'),
-(14, 2, 6, 'Casual Dress', 1400, 'girl dress', 'download.jpg', 'ladies cloths girl'),
-(15, 2, 6, 'Formal Look', 1500, 'girl dress', 'shutterstock_203611819.jpg', 'ladies wears dress girl'),
-(16, 3, 6, 'Sweter for men', 600, '2012-Winter-Sweater-for-Men-for-better-outlook', '2012-Winter-Sweater-for-Men-for-better-outlook.jpg', 'black sweter cloth winter'),
-(17, 3, 6, 'Gents formal', 1000, 'gents formal look', 'gents-formal-250x250.jpg', 'gents wear cloths'),
-(19, 3, 6, 'Formal Coat', 3000, 'ad', 'images (1).jpg', 'coat blazer gents'),
-(20, 3, 6, 'Mens Sweeter', 1600, 'jg', 'Winter-fashion-men-burst-sweater.png', 'sweeter gents '),
-(21, 3, 6, 'T shirt', 800, 'ssds', 'IN-Mens-Apparel-Voodoo-Tiles-09._V333872612_.jpg', 'formal t shirt black'),
-(22, 4, 6, 'Yellow T shirt ', 1300, 'yello t shirt with pant', '1.0x0.jpg', 'kids yellow t shirt'),
-(23, 4, 6, 'Girls cloths', 1900, 'sadsf', 'GirlsClothing_Widgets.jpg', 'formal kids wear dress'),
-(24, 4, 6, 'Blue T shirt', 700, 'g', 'images.jpg', 'kids dress'),
-(25, 4, 6, 'Yellow girls dress', 750, 'as', 'images (3).jpg', 'yellow kids dress'),
-(27, 4, 6, 'Formal look', 690, 'sd', 'image28.jpg', 'formal kids dress'),
-(32, 5, 0, 'Book Shelf', 2500, 'book shelf', 'furniture-book-shelf-250x250.jpg', 'book shelf furniture'),
-(33, 6, 2, 'Refrigerator', 35000, 'Refrigerator', 'CT_WM_BTS-BTC-AppliancesHome_20150723.jpg', 'refrigerator samsung'),
-(34, 6, 4, 'Emergency Light', 1000, 'Emergency Light', 'emergency light.JPG', 'emergency light'),
-(35, 6, 0, 'Vaccum Cleaner', 6000, 'Vaccum Cleaner', 'images (2).jpg', 'Vaccum Cleaner'),
-(36, 6, 5, 'Iron', 1500, 'gj', 'iron.JPG', 'iron'),
-(37, 6, 5, 'LED TV', 20000, 'LED TV', 'images (4).jpg', 'led tv lg'),
-(38, 6, 4, 'Microwave Oven', 3500, 'Microwave Oven', 'images.jpg', 'Microwave Oven'),
-(39, 6, 5, 'Mixer Grinder', 2500, 'Mixer Grinder', 'singer-mixer-grinder-mg-46-medium_4bfa018096c25dec7ba0af40662856ef.jpg', 'Mixer Grinder'),
-(40, 2, 6, 'Formal girls dress', 3000, 'Formal girls dress', 'girl-walking.jpg', 'ladies'),
-(45, 1, 2, 'Samsung Galaxy Note 3', 10000, '0', 'samsung_galaxy_note3_note3neo.JPG', 'samsung galaxy Note 3 neo'),
-(46, 1, 2, 'Samsung Galaxy Note 3', 10000, '', 'samsung_galaxy_note3_note3neo.JPG', 'samsung galxaxy note 3 neo'),
-(47, 4, 6, 'Laptop', 650, 'nbk', 'product01.png', 'Dell Laptop'),
-(48, 1, 7, 'Headphones', 250, 'Headphones', 'product05.png', 'Headphones Sony'),
-(49, 1, 7, 'Headphones', 250, 'Headphones', 'product05.png', 'Headphones Sony'),
-(50, 3, 6, 'boys shirts', 350, 'shirts', 'pm1.JPG', 'suit boys shirts'),
-(51, 3, 6, 'boys shirts', 270, 'shirts', 'pm2.JPG', 'suit boys shirts'),
-(52, 3, 6, 'boys shirts', 453, 'shirts', 'pm3.JPG', 'suit boys shirts'),
-(53, 3, 6, 'boys shirts', 220, 'shirts', 'ms1.JPG', 'suit boys shirts'),
-(54, 3, 6, 'boys shirts', 290, 'shirts', 'ms2.JPG', 'suit boys shirts'),
-(55, 3, 6, 'boys shirts', 259, 'shirts', 'ms3.JPG', 'suit boys shirts'),
-(56, 3, 6, 'boys shirts', 299, 'shirts', 'pm7.JPG', 'suit boys shirts'),
-(57, 3, 6, 'boys shirts', 260, 'shirts', 'i3.JPG', 'suit boys shirts'),
-(58, 3, 6, 'boys shirts', 350, 'shirts', 'pm9.JPG', 'suit boys shirts'),
-(59, 3, 6, 'boys shirts', 855, 'shirts', 'a2.JPG', 'suit boys shirts'),
-(60, 3, 6, 'boys shirts', 150, 'shirts', 'pm11.JPG', 'suit boys shirts'),
-(61, 3, 6, 'boys shirts', 215, 'shirts', 'pm12.JPG', 'suit boys shirts'),
-(62, 3, 6, 'boys shirts', 299, 'shirts', 'pm13.JPG', 'suit boys shirts'),
-(63, 3, 6, 'boys Jeans Pant', 550, 'Pants', 'pt1.JPG', 'boys Jeans Pant'),
-(64, 3, 6, 'boys Jeans Pant', 460, 'pants', 'pt2.JPG', 'boys Jeans Pant'),
-(65, 3, 6, 'boys Jeans Pant', 470, 'pants', 'pt3.JPG', 'boys Jeans Pant'),
-(66, 3, 6, 'boys Jeans Pant', 480, 'pants', 'pt4.JPG', 'boys Jeans Pant'),
-(67, 3, 6, 'boys Jeans Pant', 360, 'pants', 'pt5.JPG', 'boys Jeans Pant'),
-(68, 3, 6, 'boys Jeans Pant', 550, 'pants', 'pt6.JPG', 'boys Jeans Pant'),
-(69, 3, 6, 'boys Jeans Pant', 390, 'pants', 'pt7.JPG', 'boys Jeans Pant'),
-(70, 3, 6, 'boys Jeans Pant', 399, 'pants', 'pt8.JPG', 'boys Jeans Pant'),
-(71, 1, 2, 'Samsung galaxy s7', 5000, 'Samsung galaxy s7', 'product07.png', 'samsung mobile electronics'),
-(72, 7, 2, 'sony Headphones', 3500, 'sony Headphones', 'product02.png', 'sony Headphones electronics gadgets'),
-(73, 7, 2, 'samsung Headphones', 3500, 'samsung Headphones', 'product05.png', 'samsung Headphones electronics gadgets'),
-(74, 1, 1, 'HP i5 laptop', 5500, 'HP i5 laptop', 'product01.png', 'HP i5 laptop electronics'),
-(75, 1, 1, 'HP i7 laptop 8gb ram', 5500, 'HP i7 laptop 8gb ram', 'product03.png', 'HP i7 laptop 8gb ram electronics'),
-(76, 1, 5, 'sony note 6gb ram', 4500, 'sony note 6gb ram', 'product04.png', 'sony note 6gb ram mobile electronics'),
-(77, 1, 4, 'MSV laptop 16gb ram NVIDEA Graphics', 5499, 'MSV laptop 16gb ram', 'product06.png', 'MSV laptop 16gb ram NVIDEA Graphics electronics'),
-(78, 1, 5, 'dell laptop 8gb ram intel integerated Graphics', 4579, 'dell laptop 8gb ram intel integerated Graphics', 'product08.png', 'dell laptop 8gb ram intel integerated Graphics electronics'),
-(79, 7, 2, 'camera with 3D pixels', 2569, 'camera with 3D pixels', 'product09.png', 'camera with 3D pixels camera electronics gadgets'),
-(80, 1, 1, 'ytrfdkjsd', 12343, 'sdfhgh', '1542455446_thythtf .jpeg', 'dfgh'),
-(81, 4, 6, 'Kids blue dress', 300, 'blue dress', '1543993724_pg4.jpg', 'kids blue dress');
+(1, 1, 2, 'CRI Steel 2 HP 10 L 102 ft', 5399, 'CRI Pumps Stainless Steel 2 HP 10 L 102 ft Borewell Submersible Pumpset (Silver)\nAbout this item\nMaterial: Stainless Steel; Color: Silver\nDimensions: 35 cm x 28 cm x 20\nCapacity per Hour: 10 Ltrs; Horse Power: 2 HP\nWeight: 5 kg ; Head: 102 feet\nVoltage: Single phase, 200-240 V, CSCR, Three phase 380-450 V', 'motor1.jpg', 'samsung mobile electronics'),
+(2, 1, 3, 'BAC-S-200 is a 2HP', 6449, 'BAC-S-200 is a 2 horse power single cylinder compressor with high load carrying capacity. These compressors are continuous run worthy and provide higher discharge of water compared to 1 HP and 1.5 HP versions. These compressors are ideal for household purposes and are capable to for low voltage running. They have proven working conditions upto 600 feet at optimal working conditions.', 'motor4.png', 'mobile iphone apple'),
+(3, 2, 3, 'LUBI 3 Pumps', 21499, 'LUBI 3 to 20 Stages 5 Inch Water Filled Borewell Submersible Pumpsets (LSA/LSK Series) For Agriculture\nBorewell-Motor Phase-Three Phase\nProduct Brochure\nNumber Of Stages - 3 to 20 Stages\nUsage/Application-Agriculture\nModel Name/Number-LSA/LSK', 'pump2.jpg', 'apple ipad tablet'),
+(4, 3, 3, ' Madhav Control Panel', 1499, '1 HP Single Phase Submersible Pump Control Panel/Starter (1 HP)', 'panel2.jpg', 'iphone apple mobile'),
+(5, 3, 3, 'Load Panel', 2599, 'FeaturesAdditional information\nDigital Display for current and Voltage\nMCB for Overload & short circuit protection\nON/OFF indicator along with ON/OFF switch', 'panel1.png', 'ipad tablet samsung'),
+(6, 1, 5, 'JJ Motor', 6299, 'We are one of the well-distinguished companies in this business and are involved in providing Borewell Motor to our valuable clients. This Borewell Motor is manufactured in accordance with set market quality standards and norms. In addition, we also test these products for quality', 'motor2.jpg', 'samsung laptop '),
+(7, 1, 5, 'JJ Heavy Duty+', 7500, 'Usage/Application	Sewage, Industrial, Agriculture, Domestic\nPower Source	Hydraulic\nDischarge Outlet Size	1 to 2 in\nMaximum Discharge Flow	100 - 500 LPM\nType	Borewell\nType of Submersible Pumps(V3, V4, V5, V6, V8)\nMaximum Head-15 to 50 m\nMotor Phase-Three Phase', 'motor3.jpg', 'Laptop Hp Pavillion'),
+(8, 1, 4, 'BAC-S-300', 4899, 'Pump Dealers, Borewell Contractors, Water Pump Repair & Services, Water Pump Dealers, Submersible Water Pump Dealers, Borewell Contractors For Drinking Water, Openwell Submersible Pump Dealers, Borewell Pump Dealers.', 'motor5.png', 'sony mobile'),
+(9, 1, 5, 'KWV+', 5500, 'MODEL POWER RANGE (KW) VERSION SPEED TOTAL HEAD RANGE NOMINAL OUTLET SIZE Self Priming 0.37 kw-0.75kw Single Phase 200-230V 50Hz-2800Rpm 5-42m 1\"\nWe are one of the well-distinguished companies in the market that is into presenting a quality approved range of Regenerative Self Priming Pump.', 'motor6.jpg', 'iphone apple mobile'),
+(10, 1, 5, 'SW Jet', 4950, 'Shallow Well Jet Pumps can pump water from 0\' to 25\' deep. Convertible Well Jet Pumps pump water from 0\' to 90\' deep. A Convertible Well Jet Pump can operate between 0\' to 25\' with a shallow jet well nozzle or between 25\' to 90\' deep with an ejector assembly.', 'motor7.jpg', 'red dress '),
+(11, 1, 5, 'CP 1Hp', 4500, '1 hp borewell air compressor pumps have been manufactured to draw water from the depth of 100-400 feet. Discharge capacity of water varies from depth of bore. Specially manufacturers to run effectively in the field of agriculture and domestic purpose. Our monoblock borewell air compressor pumps discharges water effectively at low power consumption.', 'motor8.png', 'blue dress cloths'),
+(12, 1, 3, 'Centrifugal Monoset', 8300, 'Centrifugal Monoset Pumps\nFeaturesAdditional information\nMonoset Construction with High Quality Mechanical Seal\nHigh Grade Electrical Stamping CRNGO-M47 for higher efficiency\nWorks in wide voltage band effectively', 'motor9.png', 'girl dress cloths casual'),
+(13, 2, 6, 'KirloskarSP', 15900, 'Discharge Outlet Size	51 to 100 mm\nMaximum Discharge Flow	100 - 500 LPM\nBrand	Kirloskar\nApplication	Agriculture\nPhase	Single', 'pump1.jpg', 'girl dress'),
+(14, 2, 4, 'V-4 Water filled', 28000, 'FeaturesAdditional information\nSpecially designed thrust bearing ensures highest reliability\nHigh Grade Electrical Stamping CRNGO-M47 for higher efficiency\nWide voltage operation from 250 -440V', 'pump3.png', 'ladies cloths girl'),
+(15, 2, 4, 'V-4 Stainless Steel Pumps', 23500, 'FeaturesAdditional information\nSpecially designed thrust bearing ensures highest reliability\nHigh Grade Electrical Stamping CRNGO-M47 for higher efficiency\nWide voltage operation from 250 -440V', 'pump4.png', 'ladies wears dress girl'),
+(16, 2, 6, 'V-6 Water Filled', 38000, 'FeaturesAdditional information\nSpecially designed thrust bearing ensures highest reliability\nHigh Grade Electrical Stamping CRNGO-M47 for higher efficiency\nIn built Check Valve prevents pumps parts from damage due to sudden back pressure', 'pump5.png', 'black sweter cloth winter'),
+(17, 2, 4, 'ACM Agricultural Solar Pump', 32800, 'FeaturesAdditional information\nPure SS304 Stainless Steel construction\nHighly reliable & long operating life\nEasy Installation in remote places', 'pump6.png', 'gents wear cloths'),
+(18, 4, 2, 'UJ Pipes', 450, 'A pipe is a tubular section or hollow cylinder, usually but not necessarily of circular cross-section, used mainly to convey substances which can flow ', 'pipe1.jpg', ''),
+(19, 4, 2, 'Poly Strength', 800, 'A pipe is a tubular section or hollow cylinder, usually but not necessarily of circular cross-section, used mainly to convey substances which can flow ', 'pipe2.png', ''),
+(20, 4, 2, '100MM Water pipes', 1200, 'A pipe is a tubular section or hollow cylinder, usually but not necessarily of circular cross-section, used mainly to convey substances which can flow ', 'pipe5.jpg', ''),
+(21, 4, 2, 'SLP Boring Pipes', 600, 'A pipe is a tubular section or hollow cylinder, usually but not necessarily of circular cross-section, used mainly to convey substances which can flow ', 'pipe4.png', ''),
+(22, 3, 1, 'Case CP', 1800, 'Iron Control Panel For Open Borewell Submersible Pumps, Packaging Type: Box', 'caseCP.jpg', ''),
+(23, 3, 1, 'Plastic Panel', 990, 'Backed by a latest infrastructural setup, we are providing the best quality approved an array of Automatic Control Panel For Borewell Submersible Pump in the market.', 'cp3.jpg', ''),
+(25, 4, 1, 'Submersible Cables', 750, 'We are a well-known organization, involved in providing a finely developed Submersible Cable, which is highly demanded in the market.', 'cable1.jpg', ''),
+(26, 4, 1, 'KEI Submersible Cables', 900, 'KEI’s especially designed winding wires, outfitted with a high-grade insulation impermeable to liquids, offer highest quality for submersible motors and guarantee trouble-free operation and long motor life. These Wires serve maximum range of submersible pump manufactures and thousands of rewinders across the country due to KEI’s proven reliability in quality products.', 'cable2.jpg', ''),
+(82, 4, 2, 'Pipe connector Set', 350, 'A pipe is a tubular section or hollow cylinder, usually but not necessarily of circular cross-section, used mainly to convey substances which can flow ', 'connectors1.jpg', '');
 
 -- --------------------------------------------------------
 
@@ -367,7 +314,10 @@ INSERT INTO `user_info` (`user_id`, `first_name`, `last_name`, `email`, `passwor
 (22, 'puneeth', 'v', 'hemu@gmail.com', '1234534', '9877654334', 'snhdgvajfehyfygv', 'asdjbhfkeur'),
 (23, 'hemanth', 'reddy', 'hemanth@gmail.com', 'Puneeth@123', '9876543234', 'Bangalore', 'Kumbalagodu'),
 (24, 'newuser', 'user', 'newuser@gmail.com', 'puneeth@123', '9535688928', 'Bangalore', 'Kumbalagodu'),
-(25, 'otheruser', 'user', 'otheruser@gmail.com', 'puneeth@123', '9535688928', 'Bangalore', 'Kumbalagodu');
+(25, 'otheruser', 'user', 'otheruser@gmail.com', 'puneeth@123', '9535688928', 'Bangalore', 'Kumbalagodu'),
+(26, 'ajay', 'raman', 'ajay@gmail.com', 'ajay@1234', '8282822882', 'Kalyan', 'Thane'),
+(27, 'Rajeev', 'v', 'rajeev@gmail.com', '12345678', '22222', 'Thane', 'sdadasdad'),
+(28, 'Aman', 'S', 'aman@gmail.com', 'asdnas1212@@12', '9388267682', 'adaksdk kkask dkaskksdka k', 'Pune');
 
 --
 -- Triggers `user_info`
@@ -411,7 +361,10 @@ INSERT INTO `user_info_backup` (`user_id`, `first_name`, `last_name`, `email`, `
 (22, 'puneeth', 'v', 'hemu@gmail.com', '1234534', '9877654334', 'snhdgvajfehyfygv', 'asdjbhfkeur'),
 (23, 'hemanth', 'reddy', 'hemanth@gmail.com', 'Puneeth@123', '9876543234', 'Bangalore', 'Kumbalagodu'),
 (24, 'newuser', 'user', 'newuser@gmail.com', 'puneeth@123', '9535688928', 'Bangalore', 'Kumbalagodu'),
-(25, 'otheruser', 'user', 'otheruser@gmail.com', 'puneeth@123', '9535688928', 'Bangalore', 'Kumbalagodu');
+(25, 'otheruser', 'user', 'otheruser@gmail.com', 'puneeth@123', '9535688928', 'Bangalore', 'Kumbalagodu'),
+(26, 'ajay', 'raman', 'ajay@gmail.com', 'ajay@1234', '8282822882', 'Kalyan', 'Thane'),
+(27, 'Rajeev', 'v', 'rajeev@gmail.com', '12345678', '22222', 'Thane', 'sdadasdad'),
+(28, 'Aman', 'S', 'aman@gmail.com', 'asdnas1212@@12', '9388267682', 'adaksdk kkask dkaskksdka k', 'Pune');
 
 --
 -- Indexes for dumped tables
@@ -512,7 +465,7 @@ ALTER TABLE `brands`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=147;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -548,25 +501,25 @@ ALTER TABLE `orders_info`
 -- AUTO_INCREMENT for table `order_products`
 --
 ALTER TABLE `order_products`
-  MODIFY `order_pro_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
+  MODIFY `order_pro_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+  MODIFY `product_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
 
 --
 -- AUTO_INCREMENT for table `user_info`
 --
 ALTER TABLE `user_info`
-  MODIFY `user_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `user_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `user_info_backup`
 --
 ALTER TABLE `user_info_backup`
-  MODIFY `user_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `user_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- Constraints for dumped tables
